@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Uzdevums.Models;
 using Microsoft.EntityFrameworkCore;
+using Uzdevums.Controllers;
 
 namespace Uzdevums.Data
 {
@@ -14,15 +15,21 @@ namespace Uzdevums.Data
 
         public DbSet<ChangeLog> ChangeLogs { get; set; }
 
+        private void AddHardcodedUser(string userName, string password, bool isAdmin)
+        {
+            string salt = AccountController.GetSalt();
+            string hash = AccountController.SaltAndHashPassword(password, salt);
+            User user = new User() { Name = userName, PasswordHash = hash, Salt = salt, IsAdmin = isAdmin };
+            Users.Add(user);
+        }
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
             //Database.EnsureDeleted();
             if (Database.EnsureCreated())
             {
-                Users.AddRange(
-                    new User { Name = "admin", Password = "admin", IsAdmin = true },
-                    new User { Name = "user", Password = "user", IsAdmin = false }
-                );
+                AddHardcodedUser("admin", "admin", true);
+                AddHardcodedUser("user", "user", false);
 
                 Products.AddRange(
                     new Product { Name = "HDD 1TB", NumberOfUnits = 55, PricePerUnit = 74.09M },

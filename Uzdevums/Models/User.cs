@@ -16,10 +16,12 @@ namespace Uzdevums.Models
         [Required]
         public string Name { get; set; }
 
-        [MaxLength(150)]
-        [Required]
-        public string Password { get; set; }
-
         public bool IsAdmin { get; set; }
+
+        [MaxLength(24)]
+        public string Salt { get; set; }
+
+        [MaxLength(64)]
+        public string PasswordHash { get; set; }
     }
 }

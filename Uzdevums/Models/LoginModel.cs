@@ -17,6 +17,7 @@ namespace Uzdevums.Models
         [Display(Name = "Parole")]
         [Required(ErrorMessage = "Nav norādīta parole")]
         [MaxLength(150)]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
     }
 }
