@@ -76,7 +76,7 @@ namespace Uzdevums.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToRoute("/");
+            return RedirectToAction(nameof(Login));
         }
 
         public IActionResult AccessDenied()
