@@ -12,7 +12,7 @@ namespace Uzdevums.Models
         [Display(Name = "Lietotājs")]
         [Required(ErrorMessage = "Nav norādīts lietotājs")]
         [MaxLength(150)] 
-         public string Name { get; set; }
+        public string Name { get; set; }
 
         [Display(Name = "Parole")]
         [Required(ErrorMessage = "Nav norādīta parole")]

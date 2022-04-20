@@ -10,7 +10,7 @@ namespace Uzdevums.Models
     {
         [Required]
         [Key]
-        public int UserId { get; set; }
+        public int Id { get; set; }
 
         [MaxLength(150)]
         [Required]

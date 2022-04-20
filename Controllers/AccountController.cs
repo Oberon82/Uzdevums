@@ -50,7 +50,7 @@ namespace Uzdevums.Controllers
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name),
-                        new Claim("id", user.UserId.ToString())
+                        new Claim("id", user.Id.ToString())
                     };
 
                     if (user.IsAdmin)
