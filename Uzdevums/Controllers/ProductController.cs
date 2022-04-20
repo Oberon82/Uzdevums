@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Uzdevums.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace Uzdevums.Controllers
 {
@@ -77,7 +78,7 @@ namespace Uzdevums.Controllers
             {            
                 _context.Add(product);
                 await _context.SaveChangesAsync();
-                LogChanges(product.Id, "created");
+                LogChanges(product, null);
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
@@ -113,9 +114,8 @@ namespace Uzdevums.Controllers
             {
                 try
                 {
-
                     _context.Update(product);
-                    LogChanges(product.Id, "edit");
+                    LogChanges(product, product);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -159,7 +159,7 @@ namespace Uzdevums.Controllers
         {
             var product = await _context.Products.FindAsync(id);
             _context.Products.Remove(product);
-            LogChanges(product.Id, "deleted");
+            LogChanges(null, product);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -169,15 +169,28 @@ namespace Uzdevums.Controllers
             return await _context.Products.AnyAsync(e => e.Id == id);
         }
 
-        public void LogChanges(int productId, string changeText)
+        public void LogChanges(Product oldProduct, Product newProduct)
         {
             ChangeLog changelog = new ChangeLog();
             changelog.CreatedOn = DateTime.Now;
-            changelog.ProductId = productId;
+
+            // Nezinu, ko vajadzētu saglabāt???
+            if (oldProduct is not null)
+            {
+                changelog.OldValue = JsonConvert.SerializeObject(oldProduct);
+                changelog.ProductId = oldProduct.Id;
+            }
+
+            if (newProduct is not null)
+            {
+                changelog.NewValue = JsonConvert.SerializeObject(newProduct);
+                changelog.ProductId = newProduct.Id;
+            }
+
             string tmpid = User.FindFirst(x => x.Type == "id").Value;
-            changelog.UserUserId = int.Parse(tmpid);
-            changelog.ChangeText = changeText;
-            _context.ChangeLogs.Add(changelog);
+            changelog.UserId = int.Parse(tmpid);
+           _context.ChangeLogs.Add(changelog);
+            _context.SaveChanges();
         }
     }
 }
