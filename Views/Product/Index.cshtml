@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Uzdevums.Models.Product>
+﻿@model IEnumerable<Uzdevums.Models.ProductViewModel>
 
 @{
     ViewData["Title"] = "Produktu saraksts";
@@ -27,7 +27,7 @@
                         @Html.DisplayNameFor(model => model.PricePerUnit)
                     </th>
                     <th>
-                        Cena ar PVN
+                        @Html.DisplayNameFor(model => model.PriceWithVat)
                     </th>
                     <th></th>
                 </tr>
@@ -46,7 +46,7 @@
                             @Html.DisplayFor(modelItem => item.PricePerUnit)
                         </td>
                         <td>
-                            @((item.PricePerUnit * item.NumberOfUnits)*(1 + ViewBag.PVN))
+                            @Html.DisplayFor(modelItem => item.PriceWithVat)
                         </td>
                         <td>
                             <a class="text-decoration-none" asp-action="Detail" asp-route-id="@item.Id"><i class="bi bi-eye"></i> Apskatīties</a>

@@ -19,6 +19,12 @@ namespace Uzdevums.Controllers
 
         private readonly ILogger<ProductController> _logger;
 
+        public static decimal CalcPriceWithVat(int unitcount, decimal price, int vat)
+        {
+            decimal _vat = (decimal)vat / (decimal)100;
+            return Convert.ToDecimal(unitcount * price * (1 + _vat));
+        } 
+
         private IConfiguration Configuration { get; }
 
         public ProductController(ILogger<ProductController> logger, ApplicationContext context, IConfiguration configuration)
@@ -33,7 +39,8 @@ namespace Uzdevums.Controllers
         {
             int _pvn = Configuration.GetValue<int>("PVN");
             ViewBag.PVN = _pvn;
-            return View(await _context.Products.ToListAsync());
+            return View(await _context.Products.Select(p => new ProductViewModel() 
+                { Id = p.Id, Name = p.Name, NumberOfUnits = p.NumberOfUnits, PricePerUnit = p.PricePerUnit, PriceWithVat = CalcPriceWithVat(p.NumberOfUnits, p.PricePerUnit, _pvn)}).ToListAsync());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
