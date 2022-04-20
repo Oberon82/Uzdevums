@@ -78,8 +78,9 @@ namespace Uzdevums.Controllers
             {            
                 _context.Add(product);
                 await _context.SaveChangesAsync();
-                LogChanges(product, null);
-                return RedirectToAction(nameof(Index));
+                LogChanges(null, product);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index)) ;
             }
             return View(product);
         }
@@ -112,10 +113,11 @@ namespace Uzdevums.Controllers
 
             if (ModelState.IsValid)
             {
+                Product oldProduct = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
                 try
                 {
                     _context.Update(product);
-                    LogChanges(product, product);
+                    LogChanges(oldProduct, product);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -158,8 +160,8 @@ namespace Uzdevums.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _context.Products.FindAsync(id);
-            _context.Products.Remove(product);
             LogChanges(null, product);
+            _context.Products.Remove(product);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -175,6 +177,7 @@ namespace Uzdevums.Controllers
             changelog.CreatedOn = DateTime.Now;
 
             // Nezinu, ko vajadzētu saglabāt???
+
             if (oldProduct is not null)
             {
                 changelog.OldValue = JsonConvert.SerializeObject(oldProduct);
@@ -189,8 +192,7 @@ namespace Uzdevums.Controllers
 
             string tmpid = User.FindFirst(x => x.Type == "id").Value;
             changelog.UserId = int.Parse(tmpid);
-           _context.ChangeLogs.Add(changelog);
-            _context.SaveChanges();
+            _context.ChangeLogs.Add(changelog);
         }
     }
 }
