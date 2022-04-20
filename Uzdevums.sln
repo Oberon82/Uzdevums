@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32228.343
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uzdevums", "Uzdevums.csproj", "{B3D1EAEE-BBF1-486B-ACE0-9F10271078EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uzdevums", "Uzdevums\Uzdevums.csproj", "{B3D1EAEE-BBF1-486B-ACE0-9F10271078EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UzdevumsTests", "..\UzdevumsTests\UzdevumsTests.csproj", "{7A222006-4A48-4BC0-B7BA-5C911D784251}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UzdevumsTests", "Tests\UzdevumsTests.csproj", "{7A222006-4A48-4BC0-B7BA-5C911D784251}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
