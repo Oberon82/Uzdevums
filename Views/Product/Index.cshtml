@@ -6,9 +6,12 @@
 
 <div class="card shadow-lg p-3 mb-5 bg-white rounded">
     <div class="card-header justify-content-center">
-        "Produktu saraksts"
+        Produktu saraksts
         <br />
-        <a class="text-decoration-none" asp-action="Create"><i class="bi bi-add"></i> Pievienot jaunu</a>
+        @if (User.IsInRole("admin"))
+        {
+            <a class="text-decoration-none" asp-action="Create"><i class="bi bi-add"></i> Pievienot jaunu</a>
+        }
     </div>
     <div class="card-body">
         <table class="table">
@@ -46,9 +49,14 @@
                             @((item.PricePerUnit * item.NumberOfUnits)*(1 + ViewBag.PVN))
                         </td>
                         <td>
-                            <a class="text-decoration-none" asp-action="Detail" asp-route-id="@item.Id"><i class="bi bi-eye"></i> View</a> |
-                            <a class="text-decoration-none" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil"></i> Edit</a> |
-                            <a class="text-decoration-none" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i> Delete</a>
+                            <a class="text-decoration-none" asp-action="Detail" asp-route-id="@item.Id"><i class="bi bi-eye"></i> Apskatīties</a>
+                            @if (User.IsInRole("admin"))
+                            {
+                                 @: | 
+                                    <a class="text-decoration-none" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil"></i> Labot</a>
+                                 @: | 
+                                    <a class="text-decoration-none" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i> Dzēst</a>
+                            }
                         </td>
                     </tr>
                 }
